@@ -123,6 +123,8 @@ function initScene() {
   addScoreLabel();
   newRecordMsg.style.display = 'none';
   newRecordShown = false;
+
+  renderer.render(scene, camera);
 }
 
 function addBlock(x, y, width, depth, color = 0x410445, isBase = false) {
