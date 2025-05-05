@@ -13,10 +13,6 @@ let newHighscoreValue = 0;
 let colorHue = 0;
 let lastTime = performance.now();
 let blockSpeed = 10; // velocidad inicial
-let deferredPrompt;
-
-
-
 
 const highscoreDisplay = document.getElementById("highscoreDisplay");
 const newRecordMsg = document.getElementById("newRecordMsg");
@@ -26,8 +22,8 @@ const restartBtn = document.getElementById("restartBtn");
 const playerNameInput = document.getElementById('playerNameInput');
 const submitNameBtn = document.getElementById('submitNameBtn');
 const placeSound = new Audio('/sounds/click.mp3');
-const installBtn = document.getElementById('installBtn');
 
+let deferredPrompt = null;
 
 function isMobile() {
   return /Mobi|Android/i.test(navigator.userAgent);
@@ -41,11 +37,11 @@ function init() {
   const aspect = window.innerWidth / window.innerHeight;
   camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1000);
   if (isMobile()) {
-    camera.position.set(10, 20, 10);  // Mas lejos en moviles
+    camera.position.set(10, 20, 10);  // Más lejos en móviles
   } else {
     camera.position.set(6, 12, 6);
   }
-  
+
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -87,7 +83,31 @@ function init() {
       submitNameBtn.style.display = 'none';
       playerNameInput.style.display = 'none';
     }
-  });    
+  });
+
+  // Detectar el evento de la instalación de la PWA
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // Mostrar la alerta de instalación
+    const wantsInstall = confirm("¿Quieres instalar Stack Game en tu dispositivo?");
+    if (wantsInstall) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('✅ Usuario aceptó instalar');
+        } else {
+          console.log('❌ Usuario canceló');
+        }
+        deferredPrompt = null;
+      });
+    }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    console.log('✅ PWA instalada');
+  });
 }
 
 function initScene() {
@@ -119,7 +139,7 @@ function initScene() {
   } else {
     camera.position.set(6, 12, 6);
   }
-  
+
   camera.lookAt(0, 0, 0);
 
   addScoreLabel();
@@ -155,7 +175,6 @@ function addMovingBlock() {
 
   currentBlock = { mesh, width, depth, direction: 1 };
 }
-
 
 function splitBlock() {
   const prev = stack[stack.length - 1];
@@ -194,22 +213,20 @@ function splitBlock() {
   scene.remove(currentBlock.mesh);
 
   score++;
-updateScoreLabel(score);
+  updateScoreLabel(score);
 
-placeSound.currentTime = 0; // Reinicia el audio si ya estaba sonando
-placeSound.play();
+  placeSound.currentTime = 0; // Reinicia el audio si ya estaba sonando
+  placeSound.play();
 
-// Aumentar velocidad cada 20 bloques
-if (score % 20 === 0) {
-  blockSpeed += 1; // ajustar incremento 
-}
-
+  // Aumentar velocidad cada 20 bloques
+  if (score % 20 === 0) {
+    blockSpeed += 1; // ajustar incremento 
+  }
 
   axis = axis === 'x' ? 'z' : 'x';
   addMovingBlock();
   return true;
 }
-
 
 function animate() {
   requestAnimationFrame(animate);
@@ -220,7 +237,7 @@ function animate() {
 
   if (!gameOver && currentBlock) {
     const pos = currentBlock.mesh.position;
-    const speed = blockSpeed;// bloques por segundo
+    const speed = blockSpeed; // bloques por segundo
 
     if (axis === 'x') {
       pos.x += speed * delta * currentBlock.direction;
@@ -242,7 +259,6 @@ function animate() {
 
   renderer.render(scene, camera);
 }
-
 
 function endGame() {
   gameOver = true;
@@ -322,31 +338,4 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('❌ Error registrando el SW:', err));
   });
 }
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Previene que el navegador muestre automáticamente el banner
-  e.preventDefault();
-  deferredPrompt = e;
-
-  // Muestra el botón de instalación
-  installBtn.style.display = 'block';
-
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
-
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('✅ Usuario aceptó instalar');
-      } else {
-        console.log('❌ Usuario canceló');
-      }
-      deferredPrompt = null;
-    });
-  });
-});
-
-window.addEventListener('appinstalled', () => {
-  console.log('✅ PWA instalada');
-  installBtn.style.display = 'none';
-});
+ 
