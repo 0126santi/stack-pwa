@@ -320,3 +320,39 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('❌ Error registrando el SW:', err));
   });
 }
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); // Previene el banner automático
+  deferredPrompt = e;
+
+  // Crear botón de instalación manual
+  const installBtn = document.createElement('button');
+  installBtn.textContent = 'Instalar App';
+  installBtn.id = 'installBtn';
+  installBtn.style.position = 'fixed';
+  installBtn.style.bottom = '20px';
+  installBtn.style.left = '20px';
+  installBtn.style.zIndex = 1000;
+  installBtn.style.padding = '10px 20px';
+  installBtn.style.backgroundColor = '#000';
+  installBtn.style.color = '#fff';
+  installBtn.style.border = 'none';
+  installBtn.style.borderRadius = '5px';
+  installBtn.style.cursor = 'pointer';
+  document.body.appendChild(installBtn);
+
+  installBtn.addEventListener('click', () => {
+    installBtn.remove(); // Oculta el botón
+    deferredPrompt.prompt(); // Muestra el diálogo de instalación
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('✅ Usuario aceptó instalar');
+      } else {
+        console.log('❌ Usuario canceló instalación');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
