@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stack 3D</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div id="gameover">
+    <div id="finalScore"></div>
+    <input id="playerNameInput" maxlength="10" placeholder="add name">
+    <button id="submitNameBtn">save name</button>
+    <button id="restartBtn">Restart</button>
+
+  </div>
+  <div id="hud">
+    <div id="highscoreDisplay">Record: 0</div>
+    <div id="newRecordMsg">¡New Record!</div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado:', reg))
+          .catch(err => console.error('Error al registrar Service Worker:', err));
+      });
+    }
+  </script>  
+</body>
+</html>
+
