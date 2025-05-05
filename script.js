@@ -123,8 +123,6 @@ function initScene() {
   addScoreLabel();
   newRecordMsg.style.display = 'none';
   newRecordShown = false;
-
-  renderer.render(scene, camera);
 }
 
 function addBlock(x, y, width, depth, color = 0x410445, isBase = false) {
@@ -233,17 +231,13 @@ function animate() {
 
   const offsetY = isMobile() ? 6 : 4;
   const targetY = (stack.length - 2) * boxHeight + offsetY;
-  if (Math.abs(camera.position.y - targetY) > 0.01) {
-    camera.position.y += (targetY - camera.position.y) * 0.05;
-  } else {
-    camera.position.y = targetY; // evitar frame "extraño" en el primer render
-  }  
+  camera.position.y += (targetY - camera.position.y) * 0.05;
   camera.lookAt(0, camera.position.y - 3, 0);
 
   if (scoreLabel) {
     scoreLabel.position.set(0, stack.length * boxHeight + 2, 0);
   }
-  camera.position.y = (stack.length - 2) * boxHeight + (isMobile() ? 6 : 4);
+
   renderer.render(scene, camera);
 }
 
