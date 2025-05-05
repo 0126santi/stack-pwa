@@ -84,9 +84,31 @@ button:hover {
   background-color:rgb(92, 91, 91);
 }
 
+#installBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 14px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: background-color 0.3s;
+}
 
-/* ---------------------- RESPONSIVE MOBILE ---------------------- */
-@media screen and (max-width: 768px) {
+#installBtn:hover {
+  background-color: #45a049;
+}
 
-  
+@media (max-width: 600px) {
+  #installBtn {
+    font-size: 14px;
+    padding: 12px 16px;
+    bottom: 15px;
+    right: 15px;
+  }
 }

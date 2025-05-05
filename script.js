@@ -13,6 +13,7 @@ let newHighscoreValue = 0;
 let colorHue = 0;
 let lastTime = performance.now();
 let blockSpeed = 10; // velocidad inicial
+let deferredPrompt;
 
 
 
@@ -25,6 +26,7 @@ const restartBtn = document.getElementById("restartBtn");
 const playerNameInput = document.getElementById('playerNameInput');
 const submitNameBtn = document.getElementById('submitNameBtn');
 const placeSound = new Audio('/sounds/click.mp3');
+const installBtn = document.getElementById('installBtn');
 
 
 function isMobile() {
@@ -320,3 +322,31 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('❌ Error registrando el SW:', err));
   });
 }
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Previene que el navegador muestre automáticamente el banner
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Muestra el botón de instalación
+  installBtn.style.display = 'block';
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('✅ Usuario aceptó instalar');
+      } else {
+        console.log('❌ Usuario canceló');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+
+window.addEventListener('appinstalled', () => {
+  console.log('✅ PWA instalada');
+  installBtn.style.display = 'none';
+});
