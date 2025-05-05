@@ -231,13 +231,17 @@ function animate() {
 
   const offsetY = isMobile() ? 6 : 4;
   const targetY = (stack.length - 2) * boxHeight + offsetY;
-  camera.position.y += (targetY - camera.position.y) * 0.05;
+  if (Math.abs(camera.position.y - targetY) > 0.01) {
+    camera.position.y += (targetY - camera.position.y) * 0.05;
+  } else {
+    camera.position.y = targetY; // evitar frame "extraño" en el primer render
+  }  
   camera.lookAt(0, camera.position.y - 3, 0);
 
   if (scoreLabel) {
     scoreLabel.position.set(0, stack.length * boxHeight + 2, 0);
   }
-
+  camera.position.y = (stack.length - 2) * boxHeight + (isMobile() ? 6 : 4);
   renderer.render(scene, camera);
 }
 
