@@ -331,16 +331,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
   const installBtn = document.createElement('button');
   installBtn.textContent = 'Instalar App';
   installBtn.id = 'installBtn';
-  installBtn.style.position = 'fixed';
-  installBtn.style.bottom = '20px';
-  installBtn.style.left = '20px';
-  installBtn.style.zIndex = 1000;
-  installBtn.style.padding = '10px 20px';
-  installBtn.style.backgroundColor = '#000';
-  installBtn.style.color = '#fff';
-  installBtn.style.border = 'none';
-  installBtn.style.borderRadius = '5px';
-  installBtn.style.cursor = 'pointer';
+  installBtn.className = 'install-button';
+
   document.body.appendChild(installBtn);
 
   installBtn.addEventListener('click', () => {
