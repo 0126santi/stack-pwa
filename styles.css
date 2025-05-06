@@ -90,7 +90,7 @@ button:hover {
   right: 20px;
   padding: 12px 20px;
   font-size: 16px;
-  background-color: #000;
+  background-color: rgb(32, 32, 32);;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -103,7 +103,7 @@ button:hover {
 /* Estilo especial para pantallas grandes (PC) */
 @media (min-width: 768px) {
   .install-button {
-    top: 20px;
+    top: 10px;
     bottom: auto;
     left: 20px;
     right: auto;
