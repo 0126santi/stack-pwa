@@ -348,17 +348,3 @@ window.addEventListener('beforeinstallprompt', (e) => {
     });
   });
 });
-
-// Botón de mute
-const muteBtn = document.createElement('button');
-muteBtn.textContent = '🔊';
-muteBtn.className = 'mute-button';
-document.body.appendChild(muteBtn);
-
-let isMuted = false;
-
-muteBtn.addEventListener('click', () => {
-  isMuted = !isMuted;
-  placeSound.muted = isMuted;
-  muteBtn.textContent = isMuted ? '🔇' : '🔊';
-});
