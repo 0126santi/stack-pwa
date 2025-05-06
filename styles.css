@@ -113,3 +113,18 @@ button:hover {
   }
 }
 
+.mute-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 18px;
+  z-index: 10000;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
